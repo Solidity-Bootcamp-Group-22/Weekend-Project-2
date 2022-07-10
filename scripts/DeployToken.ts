@@ -12,7 +12,11 @@ async function main() {
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY || EXPOSED_KEY);
   console.log(`Using address ${wallet.address}`);
 
-  const provider = ethers.providers.getDefaultProvider("ropsten");
+  // Adding additional params to provider to avoid getting issues w/ the rate limit:
+  const provider = ethers.providers.getDefaultProvider("ropsten", {
+    etherscan: process.env.ETHERSCAN_API_KEY,
+    infura: process.env.INFURA_API_KEY,
+  });  
   const signer = wallet.connect(provider);
 
   //.getBalance() returns of type BigNumber, we must parse this correctly to integrate w our scripts
